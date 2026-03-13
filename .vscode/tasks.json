@@ -15,7 +15,8 @@
           "RAYLIB_PATH=C:/raylib/raylib",
           "PROJECT_NAME=${fileBasenameNoExtension}",
           "OBJS=src/*.cpp",
-          "BUILD_MODE=DEBUG"
+          "BUILD_MODE=DEBUG",
+          "EXTRA_CFLAGS=-Iinclude -Isrc/includes"
         ]
       },
       "osx": {
@@ -55,7 +56,8 @@
         "args": [
           "RAYLIB_PATH=C:/raylib/raylib",
           "PROJECT_NAME=${fileBasenameNoExtension}",
-          "OBJS=src/*.cpp"
+          "OBJS=src/*.cpp",
+          "EXTRA_CFLAGS=-Iinclude -Isrc/includes"
         ]
       },
       "osx": {

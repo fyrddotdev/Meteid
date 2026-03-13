@@ -31,7 +31,7 @@ int main()
   // Initialisasi Meteor
   std::vector<Meteor> meteors;
 
-  Meteor::meteorTexture = LoadTexture("src/res/meteorid.png");
+  Meteor::meteorTexture = LoadTexture("src/assets/graphics/meteorid.png");
   Meteor meteor;
   float spawnTimer = 0.0f;
   float spawnInterval = GetRandomValue(2.5, 20) / 10.0f;
