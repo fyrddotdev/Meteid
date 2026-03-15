@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 
 #include <raylib.h>
 #include <raymath.h>
@@ -7,8 +8,12 @@
 #include "meteor.h"
 #include "player.h"
 
+#ifndef TextToFloat
+#define TextToFloat(text) (float)atof(text)
+#endif
+
 #define RAYGUI_IMPLEMENTATION
-#include <utils/raygui.h>
+#include <raygui.h>
 #include "gameUI.h"
 
 int main()
