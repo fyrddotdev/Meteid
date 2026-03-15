@@ -4,8 +4,12 @@
 #include <raymath.h>
 #include <vector>
 
-#include "player.h"
 #include "meteor.h"
+#include "player.h"
+
+#define RAYGUI_IMPLEMENTATION
+#include <utils/raygui.h>
+#include "gameUI.h"
 
 int main()
 {
@@ -25,6 +29,15 @@ int main()
   camera.rotation = 0.0f;
   camera.zoom = 1.0f;
 
+  // Initialisasi variabel untuk effect camera shake
+  float shakeDuration = 0.0f;
+  float shakeIntensity = 4.0f;
+
+  // Initialisasi GameUI
+  GameUI gameUI;
+  GameUI::gameState stateChange = GameUI::gameState::INGAME;
+  GuiLoadStyle("src/assets/styles/meteid!.rgs");
+
   // Initialisasi Player
   Player player;
 
@@ -42,6 +55,10 @@ int main()
   // Game loop Logic
   while (!WindowShouldClose())
   {
+
+    // Inisialisasi paket di frame ini
+    GameUI::UIPacket frameData;
+
     // Sistem spawn meteor dengan interval <SpawnInterval> detik
     spawnTimer += GetFrameTime();
     if (spawnTimer >= spawnInterval)
@@ -60,19 +77,32 @@ int main()
     {
       meteors[i].Update();
 
-      // Jika meteor[i] diatas playerLine.y, maka hapus meteor[i] didalam meteors container
-      if (meteors[i].y > screenHeight + meteors[i].meteorTexture.height)
+      if (meteors[i].state == MeteorState::FALLING) // Cek jika meteor sudah dalam keadaan HIT
       {
-        meteors.erase(meteors.begin() + i);
-        i--;
+
+        // Jika meteor menabrak garis batas player, maka ubah state meteor ke state DECAYING
+        if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, PlayerLine))
+        {
+          meteors[i].state = MeteorState::DECAYING;
+          meteors[i].speedX = 0;
+          meteors[i].speedY = 0;
+
+          // Efek getar pada kamera diakibatkan tabrakan
+          shakeDuration = 0.5f;
+
+          // Cek jika meteor menabrak pemain
+          if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, player.playerCollisionRect))
+          {
+            player.TriggerDamage(1);
+          }
+        }
       }
 
-      // Jika meteor menabrak garis batas player, maka hapus meteor[i] didalam meteors container
-      if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, PlayerLine))
+      // Jika meteor menabrak player, kurangi health pemain
+
+      // Efek fade & scale sebelum benar-benar dihancurkan
+      if (meteors[i].state == MeteorState::DECAYING)
       {
-        // Efek fade & scale sebelum benar-benar dihancurkan
-        meteors[i].speedX = 0;
-        meteors[i].speedY = 0;
         int fadeSubtraction = 10;
         if (meteors[i].color.a > fadeSubtraction)
         {
@@ -81,43 +111,40 @@ int main()
         }
         else
         {
-          meteors.erase(meteors.begin() + i);
-          i--;
-        }
-        // Efek getar pada kamera diakibatkan tabrakan
-        float shakeDuration = 0.5f;
-        float shakeIntensity = 4.0f;
-        if (shakeDuration > 0)
-        {
-          shakeDuration -= GetFrameTime();
-
-          camera.offset.x = screenCenter.x + GetRandomValue(-shakeIntensity, shakeIntensity);
-          camera.offset.y = screenCenter.y + GetRandomValue(-shakeIntensity, shakeIntensity);
-        }
-        {
-          camera.offset.x = Lerp(camera.offset.x, screenCenter.x, 0.02f);
-          camera.offset.y = Lerp(camera.offset.y, screenCenter.y, 0.02f);
-
-          // Paksa camera.offset berada pada titik tengah
-          if (CheckCollisionPointCircle(camera.offset, screenCenter, 0.1f))
-          {
-            camera.offset = screenCenter;
-          }
-          // std::cout << camera.offset.x << " : " << camera.offset.y << std::endl;
+          meteors[i].state = MeteorState::DESTROYING;
         }
       }
-
-      // Jika meteor menabrak player, maka game over
-      Rectangle playerCollisionRect = {
-          player.rect.x - player.rect.width / 2,
-          player.rect.y - player.rect.height / 2,
-          player.rect.width,
-          player.rect.height};
-
-      if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, playerCollisionRect))
+      // Menghancurkan semua meteor jika telah memenuhi persyaratan state
+      if (meteors[i].y > screenHeight + meteors[i].meteorTexture.height || meteors[i].state == MeteorState::DESTROYING)
       {
-        // Pass here
+        meteors.erase(meteors.begin() + i);
+        i--;
       }
+    }
+
+    // Sinkronisasi frameData
+    frameData["health"] = player.health;
+    frameData["score"] = 0;
+
+    // Logic camera shake effect
+
+    if (shakeDuration > 0)
+    {
+      shakeDuration -= GetFrameTime();
+
+      camera.offset.x = screenCenter.x + GetRandomValue(-shakeIntensity, shakeIntensity);
+      camera.offset.y = screenCenter.y + GetRandomValue(-shakeIntensity, shakeIntensity);
+    }
+    {
+      camera.offset.x = Lerp(camera.offset.x, screenCenter.x, 0.02f);
+      camera.offset.y = Lerp(camera.offset.y, screenCenter.y, 0.02f);
+
+      // Paksa camera.offset berada pada titik tengah
+      if (CheckCollisionPointCircle(camera.offset, screenCenter, 0.1f))
+      {
+        camera.offset = screenCenter;
+      }
+      // std::cout << camera.offset.x << " : " << camera.offset.y << std::endl;
     }
 
     // Drawing logic
@@ -137,6 +164,10 @@ int main()
       meteor.Draw();
     }
     EndMode2D();
+
+    // Menggambar GameUI
+    gameUI.Draw(stateChange, frameData);
+
     EndDrawing();
   }
   CloseWindow();

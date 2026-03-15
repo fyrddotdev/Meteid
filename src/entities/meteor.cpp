@@ -51,6 +51,8 @@ void Meteor::Update()
   {
     trail.pop_back(); // Menghapus trail lama jika jumlah trail sudah mencapai maksimum
   }
+
+  // Decay sebelum meteor didestroy
 }
 
 void Meteor::Draw() const
