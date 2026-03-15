@@ -1,0 +1,25 @@
+# ninja log v6
+16	1421	7952917921483422	CMakeFiles/Meteid.dir/src/entities/player.cpp.obj	e67252a9b1c69e62
+14	32	7952911142957627	clean	333bcf2043c88993
+15	1572	7952935285375951	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+12	887	7952942340067035	CMakeFiles/Meteid.dir/src/ui/gameUI.cpp.obj	5cf523552f0065d3
+14	1599	7952917921483422	CMakeFiles/Meteid.dir/src/entities/meteor.cpp.obj	5ed7725743bbbfa2
+888	1311	7952942348816863	Meteid.exe	5c3fd91eb95d6939
+12	1060	7952936951585929	CMakeFiles/Meteid.dir/src/entities/bomber.cpp.obj	b9726e387c31fad2
+14	1184	7952942878685069	CMakeFiles/Meteid.dir/src/ui/gameUI.cpp.obj	5cf523552f0065d3
+11	1867	7952942878645091	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+1867	2248	7952942897203670	Meteid.exe	5c3fd91eb95d6939
+18	1135	7952944890182222	CMakeFiles/Meteid.dir/src/ui/gameUI.cpp.obj	5cf523552f0065d3
+10	1306	7952944890112270	CMakeFiles/Meteid.dir/src/entities/player.cpp.obj	e67252a9b1c69e62
+15	1850	7952944890162236	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+1850	2266	7952944908510937	Meteid.exe	5c3fd91eb95d6939
+15	1092	7952945208467780	CMakeFiles/Meteid.dir/src/ui/gameUI.cpp.obj	5cf523552f0065d3
+11	1303	7952945208417811	CMakeFiles/Meteid.dir/src/entities/player.cpp.obj	e67252a9b1c69e62
+1303	1674	7952945221349848	Meteid.exe	5c3fd91eb95d6939
+15	1221	7952945581024290	CMakeFiles/Meteid.dir/src/entities/meteor.cpp.obj	5ed7725743bbbfa2
+19	1705	7952945581064264	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+1705	2113	7952945597925212	Meteid.exe	5c3fd91eb95d6939
+13	1545	7952946084470205	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+1546	1917	7952946099800027	Meteid.exe	5c3fd91eb95d6939
+12	1568	7952946665404902	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
+1569	1954	7952946680977635	Meteid.exe	5c3fd91eb95d6939

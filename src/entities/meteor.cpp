@@ -18,7 +18,7 @@ Meteor::Meteor()
   rotation = GetRandomValue(0, 3600) / 10.0f;
 
   speedX = GetRandomValue(-20, 20) / 10.0f;
-  speedY = GetRandomValue(40, 60) / 10.0f;
+  speedY = GetRandomValue(50, 80) / 10.0f;
 
   // Mengkalkulasi radius meteor
   // Doing some basic math below ( its easy asf )

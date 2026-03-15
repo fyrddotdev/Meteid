@@ -1,16 +1,12 @@
 #include <iostream>
-#include <stdlib.h>
 
 #include <raylib.h>
 #include <raymath.h>
 #include <vector>
 
 #include "meteor.h"
+#include "bomber.h"
 #include "player.h"
-
-#ifndef TextToFloat
-#define TextToFloat(text) (float)atof(text)
-#endif
 
 #define RAYGUI_IMPLEMENTATION
 #include <raygui.h>
@@ -52,7 +48,10 @@ int main()
   Meteor::meteorTexture = LoadTexture("src/assets/graphics/meteorid.png");
   Meteor meteor;
   float spawnTimer = 0.0f;
-  float spawnInterval = GetRandomValue(2.5, 20) / 10.0f;
+  float spawnInterval = GetRandomValue(3, 15) / 10.0f;
+
+  // Inisialisasi Bomber
+  Bomber bomber;
 
   // Initialisasi Game Environtment
   const Rectangle PlayerLine = {-32, player.rect.y - 4, screenWidth + 64, 8};
@@ -66,16 +65,18 @@ int main()
 
     // Sistem spawn meteor dengan interval <SpawnInterval> detik
     spawnTimer += GetFrameTime();
+    // std::cout << "Spawn timer :" << spawnTimer << std::endl;
     if (spawnTimer >= spawnInterval)
     {
       meteors.push_back(Meteor());
       spawnTimer = 0;
-      spawnInterval = GetRandomValue(2.5, 20) / 10.0f;
+      spawnInterval = GetRandomValue(3, 15) / 10.0f;
       // std::cout << "Meteor Timer triggered" << std::endl;
     }
 
     // Update
     player.Update();
+    bomber.Update();
 
     // For loop untuk cek dan update setiap meteor[i] didalam meteors container
     for (size_t i = 0; i < meteors.size(); i++)
@@ -162,6 +163,7 @@ int main()
 
     // Menggambar object seperti player, meteors, dll
     player.Draw();
+    bomber.Draw();
 
     // Spawn setiap meteor
     for (auto &meteor : meteors)
@@ -175,5 +177,7 @@ int main()
 
     EndDrawing();
   }
+
+  UnloadTexture(meteor.meteorTexture);
   CloseWindow();
 }

@@ -3,7 +3,7 @@
 #include "player.h"
 
 Player::Player()
-    : speedX(5), health(4), score(0), rect{256, 550, 32, 32} // x, y, sizeX, sizeY
+    : speedX(5), health(10), score(0), rect{256, 550, 32, 32} // x, y, sizeX, sizeY
       ,
       origin{0}, rotation(0), gotHit(false), damageInterval(0.4f), damageTimer(0.0f)
 {
