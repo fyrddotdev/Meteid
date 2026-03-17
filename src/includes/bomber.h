@@ -20,5 +20,8 @@ public:
 
 private:
   float size = 64.0f;
+  float speedX = 3.0f;
+  float x;
+
   static std::vector<Texture2D> bomberTextures;
 };

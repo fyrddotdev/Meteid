@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <raymath.h>
 #include <iostream>
 #include <vector>
 
@@ -10,6 +11,10 @@ float animSpeed = 1.0f;
 int currentFrame = 0;
 int maxFrame;
 
+int minX;
+int maxX;
+float ratio;
+
 Bomber::Bomber()
 {
   // Memuat semua texture yang dibutuhkan
@@ -20,13 +25,18 @@ Bomber::Bomber()
 
   // Setelah memuat, tentukan MaxFrame dari bomberTexture
   maxFrame = bomberTextures.size();
+
+  // Masukan nilai variabel yang akan dibutuhkan untuk movement Bomber
+  minX = 0 + size;
+  maxX = GetScreenWidth() - size;
+  x = minX;
 }
 
 void Bomber::Update()
 {
-
   // Logic untuk animasi ( Planned to make this feature a modular script but not now... )
   animTimer += GetFrameTime();
+
   if (animTimer >= animSpeed)
   {
     if (currentFrame < maxFrame)
@@ -42,6 +52,6 @@ void Bomber::Draw() const
 {
   if (bomberTextures.size() != 0)
   {
-    DrawTexturePro(bomberTextures[currentFrame], {0, 0, 16, 16}, {(float)GetScreenWidth() / 2, 64, size, size}, {size / 2, size / 2}, 0, WHITE);
+    DrawTexturePro(bomberTextures[currentFrame], {0, 0, 16, 16}, {x, 64, size, size}, {size / 2, size / 2}, 0, WHITE);
   }
 }
