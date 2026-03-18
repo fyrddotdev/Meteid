@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Meteid.exe"
+			"path" : "Debug/Meteid.exe"
 		},
 		{
-			"path" : "Meteid.pdb"
+			"path" : "Debug/Meteid.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -15,7 +15,6 @@
 		[
 			"add_executable",
 			"target_link_libraries",
-			"add_custom_command",
 			"include_directories"
 		],
 		"files" : 
@@ -42,21 +41,10 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 42,
-				"parent" : 0
-			},
-			{
-				"command" : 3,
-				"file" : 0,
 				"line" : 10,
 				"parent" : 0
 			}
 		]
-	},
-	"codemodelVersion" : 
-	{
-		"major" : 2,
-		"minor" : 9
 	},
 	"compileGroups" : 
 	[
@@ -70,15 +58,15 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"path" : "C:/raylib_msvc/include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"path" : "C:/Users/Admin/Documents/Projects/Meteid-Raylib_Edition/src/includes"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"path" : "C:/Users/Admin/Documents/Projects/Meteid-Raylib_Edition/src/includes/utils"
 				}
 			],
@@ -101,6 +89,12 @@
 			]
 		}
 	],
+	"dependencies" : 
+	[
+		{
+			"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df"
+		}
+	],
 	"id" : "Meteid::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
@@ -111,11 +105,7 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "/machine:x64 /debug /INCREMENTAL",
-				"role" : "flags"
-			},
-			{
-				"fragment" : "/subsystem:console",
+				"fragment" : "/machine:x64 /debug /INCREMENTAL /subsystem:console",
 				"role" : "flags"
 			},
 			{
@@ -150,38 +140,8 @@
 		],
 		"language" : "CXX"
 	},
-	"linkLibraries" : 
-	[
-		{
-			"backtrace" : 2,
-			"fragment" : "C:/raylib_msvc/lib/raylib.lib"
-		},
-		{
-			"backtrace" : 2,
-			"fragment" : "winmm"
-		},
-		{
-			"backtrace" : 2,
-			"fragment" : "gdi32"
-		},
-		{
-			"backtrace" : 2,
-			"fragment" : "opengl32"
-		},
-		{
-			"backtrace" : 2,
-			"fragment" : "shell32"
-		}
-	],
 	"name" : "Meteid",
 	"nameOnDisk" : "Meteid.exe",
-	"orderDependencies" : 
-	[
-		{
-			"backtrace" : 3,
-			"id" : "Meteid::@6890427a1f51a3e7e1df"
-		}
-	],
 	"paths" : 
 	{
 		"build" : ".",

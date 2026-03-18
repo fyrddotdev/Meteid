@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <raymath.h>
 #include <iostream>
 #include "player.h"
 
@@ -36,15 +37,17 @@ void Player::Update()
     rotation += speedX;
   }
 
-  // Teleport jika keluar scene
-  if (rect.x < (0 - rect.width))
-  {
-    rect.x = 360;
-  }
-  else if (rect.x > (GetScreenWidth() + rect.width))
-  {
-    rect.x = 0 - rect.width + 1;
-  }
+  // Teleport jika keluar layar
+  rect.x = Wrap(rect.x, 0 - (rect.width / 2), GetScreenWidth() + (rect.width / 2)); // Pake Wrap() lebih efektif
+
+  // if (rect.x < (0 - rect.width))
+  // {
+  //   rect.x = 360;
+  // }
+  // else if (rect.x > (GetScreenWidth() + rect.width))
+  // {
+  //   rect.x = 0 - rect.width + 1;
+  // }
 
   // Cek jika player terkena hit, dia akan melakukan reset pada variabel bool gotHit.
 

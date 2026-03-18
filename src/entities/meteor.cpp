@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <raylib.h>
+#include <raymath.h>
 
 #include "meteor.h"
 // Mendefinisikan meteorTexture
@@ -35,15 +36,16 @@ void Meteor::Update()
   x = center.x - (meteorTexture.width * scale / 2);
   y = center.y - (meteorTexture.height * scale / 2);
 
-  // Teleport jika keluar layar
-  if (center.x > (GetScreenWidth() + (meteorTexture.width)))
-  {
-    center.x = 0 - meteorTexture.width + 1;
-  }
-  else if (center.x < (0 - (meteorTexture.width)))
-  {
-    center.x = GetScreenWidth();
-  }
+  // // Teleport jika keluar layar
+  center.x = Wrap(center.x, 0 - (meteorTexture.width * scale / 2), GetScreenWidth() + (meteorTexture.width * scale / 2)); // Pake Wrap() lebih efektif
+  // if (center.x > (GetScreenWidth() + (meteorTexture.width)))
+  // {
+  //   center.x = 0 - meteorTexture.width + 1;
+  // }
+  // else if (center.x < (0 - (meteorTexture.width)))
+  // {
+  //   center.x = GetScreenWidth();
+  // }
 
   // Trail effect untuk meteor
   trail.insert(trail.begin(), center); // Memasukan posisi meteor sekarang pada array pertama
@@ -51,8 +53,6 @@ void Meteor::Update()
   {
     trail.pop_back(); // Menghapus trail lama jika jumlah trail sudah mencapai maksimum
   }
-
-  // Decay sebelum meteor didestroy
 }
 
 void Meteor::Draw() const

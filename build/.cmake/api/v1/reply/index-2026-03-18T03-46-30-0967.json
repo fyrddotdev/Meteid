@@ -3,39 +3,40 @@
 	{
 		"generator" : 
 		{
-			"multiConfig" : false,
-			"name" : "Ninja"
+			"multiConfig" : true,
+			"name" : "Visual Studio 17 2022",
+			"platform" : "x64"
 		},
 		"paths" : 
 		{
-			"cmake" : "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe",
-			"cpack" : "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cpack.exe",
-			"ctest" : "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/ctest.exe",
-			"root" : "C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-4.2"
+			"cmake" : "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe",
+			"cpack" : "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cpack.exe",
+			"ctest" : "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/ctest.exe",
+			"root" : "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.31"
 		},
 		"version" : 
 		{
 			"isDirty" : false,
-			"major" : 4,
-			"minor" : 2,
-			"patch" : 3,
-			"string" : "4.2.3-msvc3",
-			"suffix" : "msvc3"
+			"major" : 3,
+			"minor" : 31,
+			"patch" : 6,
+			"string" : "3.31.6-msvc6",
+			"suffix" : "msvc6"
 		}
 	},
 	"objects" : 
 	[
 		{
-			"jsonFile" : "codemodel-v2-3f4d5d29e7aa375efed1.json",
+			"jsonFile" : "codemodel-v2-c02f128f5708b262a04a.json",
 			"kind" : "codemodel",
 			"version" : 
 			{
 				"major" : 2,
-				"minor" : 9
+				"minor" : 8
 			}
 		},
 		{
-			"jsonFile" : "cache-v2-959302895ab7b999a6c9.json",
+			"jsonFile" : "cache-v2-c071711d71fc4f6cf2b1.json",
 			"kind" : "cache",
 			"version" : 
 			{
@@ -44,7 +45,7 @@
 			}
 		},
 		{
-			"jsonFile" : "cmakeFiles-v1-ac92b9c2bd8333e9d78b.json",
+			"jsonFile" : "cmakeFiles-v1-92271cca8b71efb9aae2.json",
 			"kind" : "cmakeFiles",
 			"version" : 
 			{
@@ -53,7 +54,7 @@
 			}
 		},
 		{
-			"jsonFile" : "toolchains-v1-142a56fe50ad83009387.json",
+			"jsonFile" : "toolchains-v1-3d685504e6a1a01f726b.json",
 			"kind" : "toolchains",
 			"version" : 
 			{
@@ -90,7 +91,7 @@
 				"responses" : 
 				[
 					{
-						"jsonFile" : "cache-v2-959302895ab7b999a6c9.json",
+						"jsonFile" : "cache-v2-c071711d71fc4f6cf2b1.json",
 						"kind" : "cache",
 						"version" : 
 						{
@@ -99,16 +100,16 @@
 						}
 					},
 					{
-						"jsonFile" : "codemodel-v2-3f4d5d29e7aa375efed1.json",
+						"jsonFile" : "codemodel-v2-c02f128f5708b262a04a.json",
 						"kind" : "codemodel",
 						"version" : 
 						{
 							"major" : 2,
-							"minor" : 9
+							"minor" : 8
 						}
 					},
 					{
-						"jsonFile" : "toolchains-v1-142a56fe50ad83009387.json",
+						"jsonFile" : "toolchains-v1-3d685504e6a1a01f726b.json",
 						"kind" : "toolchains",
 						"version" : 
 						{
@@ -117,7 +118,7 @@
 						}
 					},
 					{
-						"jsonFile" : "cmakeFiles-v1-ac92b9c2bd8333e9d78b.json",
+						"jsonFile" : "cmakeFiles-v1-92271cca8b71efb9aae2.json",
 						"kind" : "cmakeFiles",
 						"version" : 
 						{
