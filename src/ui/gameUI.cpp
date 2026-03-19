@@ -2,8 +2,10 @@
 #include <gameUI.h>
 #include <vector>
 
-float CalculatedBarWidth;
+float GameUI::flashOpacity = 0.0f;
+Color GameUI::flashColor = WHITE;
 
+float CalculatedBarWidth;
 GameUI::GameUI()
 {
   // Constructor
@@ -35,6 +37,15 @@ void GameUI::ingameUI(int health, int score) const
   DrawTextureEx(healthBarTexture[2], {4, 10}, 0, 2.5f, WHITE); // Draw healthbar icon
 }
 
+void GameUI::FlashScreen(Color clr)
+{
+  if (flashOpacity > 0.0f)
+  {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(RED, flashOpacity));
+    flashOpacity -= 0.05f;
+  }
+}
+
 void GameUI::Update()
 {
   // Update logic
@@ -42,6 +53,10 @@ void GameUI::Update()
 
 void GameUI::Draw(gameState stateChange, UIPacket &data) const
 {
+  if (flashOpacity > 0.0f)
+  {
+    FlashScreen(flashColor);
+  }
 
   switch (stateChange)
   {

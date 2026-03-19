@@ -12,6 +12,7 @@ public:
   struct Bomb
   {
     bool isActive;
+    bool isHit;
     Texture texture;
     Vector2 spawnPosition;
     float maxSpeed;

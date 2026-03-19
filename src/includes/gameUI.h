@@ -18,7 +18,12 @@ public:
   using UIData = std::variant<int, float, std::string, bool>;
   using UIPacket = std::map<std::string, UIData>;
 
+  // UI untuk gameState
   GameUI();
+
+  static float flashOpacity;
+  static Color flashColor;
+  static void FlashScreen(Color clr);
   void Update();
   void Draw(gameState stateChange, UIPacket &data) const;
 

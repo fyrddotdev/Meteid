@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "bomber.h"
+#include "player.h"
 
 std::vector<Texture2D> Bomber::bomberTextures;
 float animTimer = 0.0f;
@@ -18,7 +19,8 @@ int maxX;
 Bomber::Bomb bomb;
 float bombTimer;
 float bombInterval = GetRandomValue(50, 150) / 10.0f;
-
+Rectangle dest;
+float radius;
 Bomber::Bomber()
 {
   // Memuat semua texture yang dibutuhkan
@@ -41,6 +43,7 @@ Bomber::Bomber()
   maxX = GetScreenWidth() - size;
   x = abs((minX + maxX) / 2);
   y = 0 - size;
+  radius = (((float)bomb.texture.width * 2) / 2);
 }
 
 void Bomber::Update()
@@ -112,6 +115,7 @@ void Bomber::Update()
   }
   if (bomb.isActive)
   {
+    dest = {bomb.spawnPosition.x, bomb.spawnPosition.y, (float)bomb.texture.width * 2, (float)bomb.texture.height * 2};
     bomb.rotation += 5.0f;
     bomb.speed += bomb.acceleration;
     if (bomb.speed > bomb.maxSpeed)
@@ -124,11 +128,19 @@ void Bomber::Update()
     if (bomb.spawnPosition.y > GetScreenHeight())
     {
       bomb.isActive = false;
+      bomb.isHit = false;
       // Reset state
       bomb.maxSpeed = 10.0f;
       bomb.acceleration = 0.1f;
       bomb.speed = 0.0f;
       bomb.rotation = 0.0f;
+    }
+    // Di dalam bomber.cpp saat bom kena player
+    if (CheckCollisionCircleRec({dest.x, dest.y}, radius, Player::Get()->playerCollisionRect) && !bomb.isHit)
+    {
+      // Panggil "Player yang asli" lalu jalankan TriggerDamage
+      Player::Get()->TriggerDamage(10);
+      bomb.isHit = true;
     }
   }
 }
@@ -138,8 +150,6 @@ void Bomber::Draw() const
   if (bomberTextures.size() != 0)
     if (bomb.isActive)
     {
-      Rectangle dest = {bomb.spawnPosition.x, bomb.spawnPosition.y, (float)bomb.texture.width * 2, (float)bomb.texture.height * 2};
-
       DrawTexturePro(bomb.texture, {0, 0, (float)bomb.texture.width, (float)bomb.texture.height}, dest, {dest.width / 2, dest.height / 2}, bomb.rotation, WHITE);
     }
   {
