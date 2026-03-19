@@ -1,8 +1,0 @@
-# ninja log v6
-11	1303	7952945208417811	CMakeFiles/Meteid.dir/src/entities/player.cpp.obj	e67252a9b1c69e62
-14	32	7952911142957627	clean	333bcf2043c88993
-14	1521	7953248918463713	CMakeFiles/Meteid.dir/src/main.cpp.obj	cab4a9e910a98cf7
-15	1092	7952945208467780	CMakeFiles/Meteid.dir/src/ui/gameUI.cpp.obj	5cf523552f0065d3
-15	1221	7952945581024290	CMakeFiles/Meteid.dir/src/entities/meteor.cpp.obj	5ed7725743bbbfa2
-1521	1860	7953248933584224	Meteid.exe	5c3fd91eb95d6939
-11	1141	7953248918463713	CMakeFiles/Meteid.dir/src/entities/bomber.cpp.obj	b9726e387c31fad2
