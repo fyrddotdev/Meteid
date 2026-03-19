@@ -1,3 +1,0 @@
-C:/Users/Admin/Documents/Projects/Meteid-Raylib_Edition/build/CMakeFiles/Meteid.dir
-C:/Users/Admin/Documents/Projects/Meteid-Raylib_Edition/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Admin/Documents/Projects/Meteid-Raylib_Edition/build/CMakeFiles/ZERO_CHECK.dir
