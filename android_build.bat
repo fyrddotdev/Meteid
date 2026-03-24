@@ -28,6 +28,7 @@ cd build_android
 :: 4. Run CMake Configuration
 echo [INFO] Running CMake Configuration...
 cmake -G "Ninja" ^
+    -DPLATFORM=Android ^
     -DCMAKE_TOOLCHAIN_FILE="%NDK_PATH%/build/cmake/android.toolchain.cmake" ^
     -DANDROID_ABI="arm64-v8a" ^
     -DANDROID_PLATFORM=android-34 ^
@@ -43,6 +44,8 @@ if %ERRORLEVEL% NEQ 0 (
 echo.
 echo ---------------------------------------------------
 echo [SUCCESS] Setup Complete!
-echo [NEXT STEP] To compile the APK, run: cmake --build .
+echo [NEXT STEP] To compile the APK, run:
+echo [NEXT STEP] cd build_android
+echo [NEXT STEP] cmake --build .
 echo ---------------------------------------------------
 pause

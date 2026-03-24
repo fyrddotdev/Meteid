@@ -7,15 +7,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # --- 1. RAYLIB AUTOMATION (FETCHCONTENT) ---
 include(FetchContent)
 
+# FORCE Android platform for Raylib before fetching
+if(PLATFORM STREQUAL "Android")
+    set(PLATFORM "Android" CACHE STRING "" FORCE)
+    set(GRAPHICS "GRAPHICS_API_OPENGL_ES_20" CACHE STRING "" FORCE)
+    set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
+    # Disable GLFW so that cmake doesn't search for X11
+    set(USE_EXTERNAL_GLFW OFF CACHE BOOL "" FORCE) 
+endif()
+
 FetchContent_Declare(
   raylib
   GIT_REPOSITORY https://github.com/raysan5/raylib.git
-  GIT_TAG         master 
+  GIT_TAG         5.5 
 )
-
-set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(BUILD_GAMES     OFF CACHE BOOL "" FORCE)
-set(WITH_PIC        ON  CACHE BOOL "" FORCE) 
 
 FetchContent_MakeAvailable(raylib)
 
