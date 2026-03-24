@@ -1,8 +1,13 @@
+#if defined(PLATFORM_ANDROID)
+#include <android_native_app_glue.h>
+#endif
+
 #include <iostream>
 
 #include <raylib.h>
 #include <raymath.h>
 #include <vector>
+#include "Global.h"
 
 #include "meteor.h"
 #include "bomber.h"
@@ -17,15 +22,18 @@
 float shakeDuration;
 float shakeIntensity = 4.0f;
 
-int main()
+int main(int argc, char *argv[]) // Entry point
 {
+
   // Initialisasi GameWindow
   constexpr int screenWidth = 360;
   constexpr int screenHeight = 640;
   Vector2 screenCenter = {screenWidth / 2, screenHeight / 2};
   const Color backgroundColor = {35, 26, 63, 255};
 
+  SetConfigFlags(FLAG_WINDOW_HIGHDPI);
   InitWindow(screenWidth, screenHeight, "METEID! Raylib edition");
+  SetTextureFilter(GetFontDefault().texture, TEXTURE_FILTER_POINT);
   SetTargetFPS(60);
 
   // Initialisasi Camera
@@ -38,7 +46,7 @@ int main()
   // Initialisasi GameUI
   GameUI gameUI;
   gameUI.currState = GameUI::gameState::INGAME;
-  GuiLoadStyle("src/assets/styles/meteid!.rgs");
+  GuiLoadStyle(ASSETS_PATH "styles/meteid!.rgs");
 
   // Initialisasi Player
   Player player;
@@ -46,7 +54,7 @@ int main()
   // Initialisasi Meteor
   std::vector<Meteor> meteors;
 
-  Meteor::meteorTexture = LoadTexture("src/assets/graphics/meteorid.png");
+  Meteor::meteorTexture = LoadTexture(ASSETS_PATH "graphics/meteorid.png");
   Meteor meteor;
   float spawnTimer = 0.0f;
   float spawnInterval = GetRandomValue(3, 15) / 10.0f;
@@ -174,26 +182,20 @@ int main()
 
     if (gameUI.currState == GameUI::gameState::INGAME || gameUI.currState == GameUI::gameState::GAMEOVER)
     {
-      // Menggambar environtment
       DrawRectangleRec(PlayerLine, WHITE);
-
-      // Menggambar object seperti player, meteors, dll
       player.Draw();
       bomber.Draw();
       playerExplosion.Draw();
-
-      // Spawn setiap meteor
-      for (auto &meteor : meteors)
-      {
-        meteor.Draw();
-      }
+      for (auto &m : meteors)
+        m.Draw();
     }
     EndMode2D();
 
-    // Menggambar GameUI
+    // Gambar UI di atas kamera
     gameUI.Draw(gameUI.currState, frameData);
-
     EndDrawing();
   }
+  UnloadTexture(Meteor::meteorTexture);
   CloseWindow();
+  return 0;
 }

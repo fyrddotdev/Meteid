@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <iostream>
+#include "Global.h"
 
 #include "playerExplosion.h"
 #include "player.h"
@@ -25,8 +26,8 @@ PlayerExplosion::PlayerExplosion()
 void PlayerExplosion::Init()
 {
   textures = {
-      LoadTexture("src/assets/effects/playerExplodeEffect.png"),
-      LoadTexture("src/assets/effects/lightExplodeEffect.png")};
+      LoadTexture(ASSETS_PATH "effects/playerExplodeEffect.png"),
+      LoadTexture(ASSETS_PATH "effects/lightExplodeEffect.png")};
   PeSource = {0,
               0,
               (float)textures[0].width,

@@ -46,13 +46,17 @@ void Player::Update()
         rect.width,
         rect.height};
 
+    // Untuk touchscreen
+    bool isTouching = (GetTouchPointCount() > 0);
+    float touchX = GetTouchX();
+
     // Movement dan Rotation
-    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A) || (isTouching && touchX < GetScreenWidth() / 2))
     {
       rect.x -= speedX;
       rotation -= speedX;
     }
-    else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+    else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D) || (isTouching && touchX > GetScreenWidth() / 2))
     {
       rect.x += speedX;
       rotation += speedX;

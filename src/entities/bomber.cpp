@@ -2,6 +2,7 @@
 #include <raymath.h>
 #include <iostream>
 #include <vector>
+#include "Global.h"
 
 #include "bomber.h"
 #include "player.h"
@@ -25,10 +26,10 @@ Bomber::Bomber()
 {
   // Memuat semua texture yang dibutuhkan
   bomberTextures = {
-      LoadTexture("src/assets/graphics/enemies/bomber_0.png"),
-      LoadTexture("src/assets/graphics/enemies/bomber_1.png"),
-      LoadTexture("src/assets/graphics/enemies/bomber_2.png")};
-  bomb.texture = LoadTexture("src/assets/graphics/enemies/bomb.png");
+      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_0.png"),
+      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_1.png"),
+      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_2.png")};
+  bomb.texture = LoadTexture(ASSETS_PATH "graphics/enemies/bomb.png");
 
   // Initialisasi bomb
   bomb.maxSpeed = 10.0f;

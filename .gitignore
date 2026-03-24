@@ -1,7 +1,33 @@
-.vs/
+# --- C++ / Build Artifacts ---
 build/
+build_android/
 Meteid_Release/
-*.user
+out/
+bin/
+obj/
+*.apk
+*.so
+*.a
 *.exe
-*.dsym
-main
+*.o
+
+# --- IDEs ---
+.vs/
+.vscode/
+*.user
+*.suo
+*.db
+*.opendb
+CMakeSettings.json
+*.code-workspace
+
+# --- Android Specific ---
+.externalNativeBuild/
+.cxx/
+local.properties
+captures/
+.gradle/
+
+# --- Tools ---
+# If you have tools like aapt2 or zipalign locally in the project, ignore them
+# unless you want to provide them to everyone.

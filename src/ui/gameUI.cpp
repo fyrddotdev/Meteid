@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <gameUI.h>
 #include <vector>
+#include "Global.h"
 
 #include "player.h"
 
@@ -25,9 +26,9 @@ void GameUI::ingameUI(int health, int score) const
   CalculatedBarWidth = 12.3 * health;
 
   static std::vector<Texture2D> healthBarTexture = {
-      LoadTexture("src/assets/graphics/health_bg.png"),
-      LoadTexture("src/assets/graphics/health_fg.png"),
-      LoadTexture("src/assets/graphics/health_heart.png")};
+      LoadTexture(ASSETS_PATH "graphics/health_bg.png"),
+      LoadTexture(ASSETS_PATH "graphics/health_fg.png"),
+      LoadTexture(ASSETS_PATH "graphics/health_heart.png")};
 
   // Sejujurnya, kode ini sangat susah untuk dimaintenance. Keubah dikit kacau healtbarnya jir
   NPatchInfo NPatchHealthbarFG = {
