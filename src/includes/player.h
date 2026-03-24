@@ -15,15 +15,16 @@ public:
   int health;
   int score;
   bool isDead;
+  Vector2 origin;
 
   Rectangle rect;
-
   Rectangle playerCollisionRect;
 
 private:
   inline static Player *instance = nullptr;
-  Vector2 origin;
   float rotation;
+
+  bool afterDecay;
 
   float damageInterval;
   float damageTimer;

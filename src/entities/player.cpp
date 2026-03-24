@@ -1,18 +1,28 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <iostream>
+
 #include "player.h"
+#include "playerExplosion.h"
+
 #include "gameUI.h"
+
+extern float shakeDuration;
+extern float shakeIntensity;
+
+float decayTimer = 3.0f;
+float rotationSpeed = 0.5f;
 
 Player::Player()
 {
   speedX = 5;
-  health = 10;
+  health = 1;
   score = 0;
   rect = {256, 550, 32, 32};
   origin = {0};
   rotation = 0.0f;
   isDead = false;
+  afterDecay = false;
   damageInterval = 0.4f;
   damageTimer = 0.0f;
   instance = this;
@@ -23,43 +33,67 @@ Color playerColor = {0, 194, 200, 255};
 void Player::Update()
 {
   // Jika player mati, berhenti jalankan logic Update()
-  if (isDead)
-    return;
-
-  // Melakukan kalkulasi terus menerus terhadap origin dan collision
-  origin = {
-      rect.width / 2,
-      rect.height / 2};
-
-  playerCollisionRect = {
-      rect.x - rect.width / 2,
-      rect.y - rect.height / 2,
-      rect.width,
-      rect.height};
-
-  // Movement dan Rotation
-  if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+  if (!isDead)
   {
-    rect.x -= speedX;
-    rotation -= speedX;
+    // Melakukan kalkulasi terus menerus terhadap origin dan collision
+    origin = {
+        rect.width / 2,
+        rect.height / 2};
+
+    playerCollisionRect = {
+        rect.x - rect.width / 2,
+        rect.y - rect.height / 2,
+        rect.width,
+        rect.height};
+
+    // Movement dan Rotation
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A))
+    {
+      rect.x -= speedX;
+      rotation -= speedX;
+    }
+    else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+    {
+      rect.x += speedX;
+      rotation += speedX;
+    }
+
+    // Teleport jika keluar layar
+    rect.x = Wrap(rect.x, 0 - (rect.width / 2), GetScreenWidth() + (rect.width / 2)); // Pake Wrap() lebih efektif
   }
-  else if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D))
+
+  // Decay Animation
+  if (isDead && !afterDecay)
   {
-    rect.x += speedX;
-    rotation += speedX;
+
+    rect.y = Lerp(rect.y, 450, 0.025f);
+    rotation = Wrap(rotation + rotationSpeed, 0, 360);
+    if (rotationSpeed < 200.0f)
+    {
+      rotationSpeed += 0.2f;
+    }
+    if (decayTimer > 0)
+    {
+      decayTimer -= GetFrameTime();
+    }
+
+    if (rect.y < 450 + 1 && decayTimer <= 0)
+    {
+      if (!PlayerExplosion::Get()->enabled)
+      {
+        GameUI::flashOpacity = 1.0f;
+        GameUI::flashColor = WHITE;
+        shakeDuration = 5.0f;
+        shakeIntensity = 8.0f;
+        PlayerExplosion::Get()->enabled = true;
+      }
+      afterDecay = true;
+    }
   }
-
-  // Teleport jika keluar layar
-  rect.x = Wrap(rect.x, 0 - (rect.width / 2), GetScreenWidth() + (rect.width / 2)); // Pake Wrap() lebih efektif
-
-  // if (rect.x < (0 - rect.width))
-  // {
-  //   rect.x = 360;
-  // }
-  // else if (rect.x > (GetScreenWidth() + rect.width))
-  // {
-  //   rect.x = 0 - rect.width + 1;
-  // }
+  if (PlayerExplosion::Get()->isComplete)
+  {
+    GameUI::Get()->currState = GameUI::gameState::GAMEOVER;
+  }
 }
 
 void Player::TriggerDamage(int damagePoint)
@@ -86,7 +120,8 @@ void Player::TriggerHeal(int healPoint)
 void Player::Draw() const
 {
   // Jika player mati, berhenti melakukan draw pada player
-  if (isDead)
-    return;
-  DrawRectanglePro(rect, origin, rotation, playerColor);
+  if (!afterDecay)
+  {
+    DrawRectanglePro(rect, origin, rotation, playerColor);
+  }
 }

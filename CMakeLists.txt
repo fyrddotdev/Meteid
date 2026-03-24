@@ -11,6 +11,7 @@ include_directories(
     "${RAYLIB_DIR}/include"
     "src/includes"
     "src/includes/utils"
+    "src/includes/utils/gui"
 )
 
 file(GLOB_RECURSE SOURCES "src/*.cpp" "main.cpp")
