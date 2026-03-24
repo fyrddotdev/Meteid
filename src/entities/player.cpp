@@ -32,10 +32,10 @@ Color playerColor = {0, 194, 200, 255};
 
 void Player::Update()
 {
-  // Jika player mati, berhenti jalankan logic Update()
+  // If player is dead, stop executing Update() logic
   if (!isDead)
   {
-    // Melakukan kalkulasi terus menerus terhadap origin dan collision
+    // Constantly calculate origin and collision boundaries
     origin = {
         rect.width / 2,
         rect.height / 2};
@@ -46,11 +46,11 @@ void Player::Update()
         rect.width,
         rect.height};
 
-    // Untuk touchscreen
+    // Touchscreen support
     bool isTouching = (GetTouchPointCount() > 0);
     float touchX = GetTouchX();
 
-    // Movement dan Rotation
+    // Movement and Rotation logic
     if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A) || (isTouching && touchX < GetScreenWidth() / 2))
     {
       rect.x -= speedX;
@@ -62,14 +62,13 @@ void Player::Update()
       rotation += speedX;
     }
 
-    // Teleport jika keluar layar
-    rect.x = Wrap(rect.x, 0 - (rect.width / 2), GetScreenWidth() + (rect.width / 2)); // Pake Wrap() lebih efektif
+    // Wrap around the screen if the player goes off-bounds
+    rect.x = Wrap(rect.x, 0 - (rect.width / 2), GetScreenWidth() + (rect.width / 2));
   }
 
-  // Decay Animation
+  // Death / Decay Animation
   if (isDead && !afterDecay)
   {
-
     rect.y = Lerp(rect.y, 450, 0.025f);
     rotation = Wrap(rotation + rotationSpeed, 0, 360);
     if (rotationSpeed < 200.0f)
@@ -94,6 +93,8 @@ void Player::Update()
       afterDecay = true;
     }
   }
+
+  // Trigger GameOver state once the explosion animation completes
   if (PlayerExplosion::Get()->isComplete)
   {
     GameUI::Get()->currState = GameUI::gameState::GAMEOVER;
@@ -102,7 +103,7 @@ void Player::Update()
 
 void Player::TriggerDamage(int damagePoint)
 {
-  // Jika player mati, berhenti menerima damage lagi
+  // Prevent taking damage if the player is already dead
   if (isDead)
     return;
 
@@ -112,10 +113,11 @@ void Player::TriggerDamage(int damagePoint)
     Player::Get()->isDead = true;
   }
 
-  // Flash layar / UI
+  // Trigger screen / UI flash effect
   GameUI::flashOpacity = 1.0f;
   GameUI::flashColor = RED;
 }
+
 void Player::TriggerHeal(int healPoint)
 {
   health += healPoint;
@@ -123,7 +125,7 @@ void Player::TriggerHeal(int healPoint)
 
 void Player::Draw() const
 {
-  // Jika player mati, berhenti melakukan draw pada player
+  // Stop drawing the player entity once the decay process is finished
   if (!afterDecay)
   {
     DrawRectanglePro(rect, origin, rotation, playerColor);

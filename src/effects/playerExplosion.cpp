@@ -46,7 +46,7 @@ void PlayerExplosion::Update()
     fadeValue -= 0.01f;
     rotation = Wrap(rotation + 1.0f, 0, 360);
 
-    // Update ukuran dan posisi rect setiap frame!
+    // Update rect size and position every frame
     if (Player::Get() != nullptr)
     {
       PeDest.x = Player::Get()->rect.x - Player::Get()->rect.width / 2;

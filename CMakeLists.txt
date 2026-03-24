@@ -4,7 +4,7 @@ project(Meteid VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- 1. OTOMATISASI RAYLIB (FETCHCONTENT) ---
+# --- 1. RAYLIB AUTOMATION (FETCHCONTENT) ---
 include(FetchContent)
 
 FetchContent_Declare(
@@ -15,11 +15,11 @@ FetchContent_Declare(
 
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(BUILD_GAMES     OFF CACHE BOOL "" FORCE)
-set(WITH_PIC       ON  CACHE BOOL "" FORCE) 
+set(WITH_PIC        ON  CACHE BOOL "" FORCE) 
 
 FetchContent_MakeAvailable(raylib)
 
-# --- 2. SETTING INCLUDE & SOURCES ---
+# --- 2. INCLUDE & SOURCES SETTINGS ---
 include_directories(
     "src/includes"
     "src/includes/utils"
@@ -28,7 +28,7 @@ include_directories(
 
 file(GLOB_RECURSE SOURCES "src/*.cpp" "main.cpp")
 
-# --- 3. DEFINISI TARGET ---
+# --- 3. TARGET DEFINITION ---
 
 if(PLATFORM STREQUAL "Android")
     set(NATIVE_APP_GLUE_DIR "${CMAKE_ANDROID_NDK}/sources/android/native_app_glue")
@@ -39,7 +39,7 @@ if(PLATFORM STREQUAL "Android")
     
     target_link_libraries(${PROJECT_NAME} raylib android log GLESv2 EGL OpenSLES m atomic c)
 
-    # --- Konfigurasi Path Tools ---
+    # --- Build Tools Path Configuration ---
     set(SDK_PATH "C:/Android") 
     set(BUILD_TOOLS_VER "34.0.0")
     set(AAPT2 "${SDK_PATH}/build-tools/${BUILD_TOOLS_VER}/aapt2.exe")
@@ -51,27 +51,27 @@ if(PLATFORM STREQUAL "Android")
     target_compile_options(${PROJECT_NAME} PRIVATE -fvisibility=default)
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        # 1. Hapus sisa build lama agar bersih
+        # 1. Clean up old build artifacts
         COMMAND ${CMAKE_COMMAND} -E remove -f Meteid_Unsigned.apk
         COMMAND ${CMAKE_COMMAND} -E remove -f Meteid_Aligned.apk
         COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets" "${CMAKE_CURRENT_BINARY_DIR}/assets"
 
-        # 2. Bikin APK Kosong (Tanpa flag -A agar AAPT2 tidak merusak path)
+        # 2. Create Empty APK (Avoiding -A flag to prevent AAPT2 from corrupting paths)
         COMMAND ${AAPT2} link -o Meteid_Unsigned.apk 
                 -I ${ANDROID_JAR} 
                 --manifest "${CMAKE_CURRENT_SOURCE_DIR}/AndroidManifest.xml"
                 --auto-add-overlay
 
-        # 3. SUNTIK ASSETS (Pake 'jar' biar path-nya fix pakai /)
-        # Kita jalankan 'jar' di folder build_android agar struktur 'assets/...' terjaga
+        # 3. ASSET INJECTION (Using 'jar' to force forward-slash / paths)
+        # Executed in build_android directory to maintain 'assets/...' structure
         COMMAND jar -uf Meteid_Unsigned.apk assets
 
-        # 4. SUNTIK LIBRARY (.so)
+        # 4. LIBRARY INJECTION (.so)
         COMMAND ${CMAKE_COMMAND} -E make_directory "lib/arm64-v8a"
         COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:${PROJECT_NAME}>" "lib/arm64-v8a/"
         COMMAND jar -uf Meteid_Unsigned.apk lib/arm64-v8a/libMeteid.so
 
-        # 5. ZIPALIGN (Wajib buat Android 13+)
+        # 5. ZIPALIGN (Required for Android 13+)
         COMMAND ${ZIPALIGN} -v 4 Meteid_Unsigned.apk Meteid_Aligned.apk
 
         # 6. SIGNING

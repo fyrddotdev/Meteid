@@ -5,14 +5,14 @@
 #include <raymath.h>
 
 #include "meteor.h"
-// Mendefinisikan meteorTexture
+// Defining meteorTexture static member
 Texture2D Meteor::meteorTexture = {0};
 
 Meteor::Meteor()
     : x(0), y(-128), radius(0), scale(0.75f), speedX(0), speedY(0), rotation(0.0f), center{0, 0}, color(WHITE), max_trail_length(20)
 {
   // if (meteorTexture.id == 0) {
-  //     meteorTexture = LoadTexture("src/res/meteorid.png"); //Load meteorTexture jika kosong
+  //     meteorTexture = LoadTexture("src/res/meteorid.png"); // Load meteorTexture if empty
   // }
 
   center.x = GetRandomValue(0, GetScreenWidth());
@@ -21,8 +21,8 @@ Meteor::Meteor()
   speedX = GetRandomValue(-20, 20) / 10.0f;
   speedY = GetRandomValue(50, 80) / 10.0f;
 
-  // Mengkalkulasi radius meteor
-  // Doing some basic math below ( its easy asf )
+  // Calculate meteor radius
+  // Performing basic diagonal math for hit detection
   float diagonal = (meteorTexture.width * scale / 2) * std::sqrt(2.0f);
   radius = (diagonal / 2);
 }
@@ -32,35 +32,27 @@ void Meteor::Update()
   center.x += speedX;
   center.y += speedY;
 
-  // Memaksa x & y ditengah-tengah texture
+  // Force x & y coordinates to the center of the texture
   x = center.x - (meteorTexture.width * scale / 2);
   y = center.y - (meteorTexture.height * scale / 2);
 
-  // // Teleport jika keluar layar
-  center.x = Wrap(center.x, 0 - (meteorTexture.width * scale / 2), GetScreenWidth() + (meteorTexture.width * scale / 2)); // Pake Wrap() lebih efektif
-  // if (center.x > (GetScreenWidth() + (meteorTexture.width)))
-  // {
-  //   center.x = 0 - meteorTexture.width + 1;
-  // }
-  // else if (center.x < (0 - (meteorTexture.width)))
-  // {
-  //   center.x = GetScreenWidth();
-  // }
+  // Wrap around the screen if the meteor goes off-bounds
+  center.x = Wrap(center.x, 0 - (meteorTexture.width * scale / 2), GetScreenWidth() + (meteorTexture.width * scale / 2));
 
-  // Trail effect untuk meteor
-  trail.insert(trail.begin(), center); // Memasukan posisi meteor sekarang pada array pertama
+  // Meteor trail effect logic
+  trail.insert(trail.begin(), center); // Insert current position as the first element in the array
   if ((int)(trail.size()) > max_trail_length)
   {
-    trail.pop_back(); // Menghapus trail lama jika jumlah trail sudah mencapai maksimum
+    trail.pop_back(); // Remove oldest trail point if maximum length is reached
   }
 }
 
 void Meteor::Draw() const
 {
-  // Spawn trail logic
+  // Trail rendering logic
   for (int i = 0; i < (int)(trail.size()); i++)
   {
-    float aplhaPercentage = color.a / 255.0f; // Mencari rasio persentase dari warna meteor
+    float aplhaPercentage = color.a / 255.0f; // Calculate alpha ratio based on meteor's current color
     float ratio = (float)(max_trail_length - i) / max_trail_length;
     Color color = Fade({226, 142, 114, 255}, ratio * aplhaPercentage);
 
@@ -71,7 +63,7 @@ void Meteor::Draw() const
     DrawCircleV(trail[i], radius * ratio, color);
   }
 
-  // Code dibawah ini memperbaiki origin pada texture
+  // Adjust texture origin for proper rotation and scaling
   Rectangle source = {
       0, 0, (float)meteorTexture.width, (float)meteorTexture.height};
   Rectangle dest = {

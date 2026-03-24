@@ -18,14 +18,14 @@
 #include <raygui.h>
 #include "gameUI.h"
 
-// Initialisasi variabel diluar main() untuk effect camera shake
+// Initialize variables outside main() for camera shake effect
 float shakeDuration;
 float shakeIntensity = 4.0f;
 
 int main(int argc, char *argv[]) // Entry point
 {
 
-  // Initialisasi GameWindow
+  // Initialize GameWindow
   constexpr int screenWidth = 360;
   constexpr int screenHeight = 640;
   Vector2 screenCenter = {screenWidth / 2, screenHeight / 2};
@@ -36,22 +36,22 @@ int main(int argc, char *argv[]) // Entry point
   SetTextureFilter(GetFontDefault().texture, TEXTURE_FILTER_POINT);
   SetTargetFPS(60);
 
-  // Initialisasi Camera
+  // Initialize Camera
   Camera2D camera = {0};
   camera.offset = {screenWidth / 2, screenHeight / 2};
   camera.target = {screenWidth / 2, screenHeight / 2};
   camera.rotation = 0.0f;
   camera.zoom = 1.0f;
 
-  // Initialisasi GameUI
+  // Initialize GameUI
   GameUI gameUI;
   gameUI.currState = GameUI::gameState::INGAME;
   GuiLoadStyle(ASSETS_PATH "styles/meteid!.rgs");
 
-  // Initialisasi Player
+  // Initialize Player
   Player player;
 
-  // Initialisasi Meteor
+  // Initialize Meteor
   std::vector<Meteor> meteors;
 
   Meteor::meteorTexture = LoadTexture(ASSETS_PATH "graphics/meteorid.png");
@@ -59,26 +59,26 @@ int main(int argc, char *argv[]) // Entry point
   float spawnTimer = 0.0f;
   float spawnInterval = GetRandomValue(3, 15) / 10.0f;
 
-  // Inisialisasi Bomber
+  // Initialize Bomber
   Bomber bomber;
 
-  // Inisialisasi effects
+  // Initialize effects
   PlayerExplosion playerExplosion;
   playerExplosion.Init();
 
-  // Initialisasi Game Environtment
+  // Initialize Game Environment
   const Rectangle PlayerLine = {-32, player.rect.y - 4, screenWidth + 64, 8};
 
-  // Game loop Logic
+  // Game Loop Logic
   while (!WindowShouldClose())
   {
 
-    // Inisialisasi paket di frame ini
+    // Initialize packet for this frame
     GameUI::UIPacket frameData;
 
     if (gameUI.currState == GameUI::gameState::INGAME || gameUI.currState == GameUI::gameState::GAMEOVER)
     {
-      // Sistem spawn meteor dengan interval <SpawnInterval> detik
+      // Meteor spawning system with <SpawnInterval> second interval
       spawnTimer += GetFrameTime();
       // std::cout << "Spawn timer :" << spawnTimer << std::endl;
       if (spawnTimer >= spawnInterval)
@@ -94,15 +94,15 @@ int main(int argc, char *argv[]) // Entry point
       bomber.Update();
       playerExplosion.Update();
 
-      // For loop untuk cek dan update setiap meteor[i] didalam meteors container
+      // Loop to check and update each meteor[i] within the meteors container
       for (size_t i = 0; i < meteors.size(); i++)
       {
         meteors[i].Update();
 
-        if (meteors[i].state == MeteorState::FALLING) // Cek jika meteor sudah dalam keadaan HIT
+        if (meteors[i].state == MeteorState::FALLING) // Check if meteor is in FALLING state
         {
 
-          // Jika meteor menabrak garis batas player, maka ubah state meteor ke state DECAYING
+          // If meteor hits the player's boundary line, change state to DECAYING
           if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, PlayerLine))
           {
             meteors[i].state = MeteorState::DECAYING;
@@ -112,10 +112,10 @@ int main(int argc, char *argv[]) // Entry point
             if (!player.isDead)
               player.score += 1;
 
-            // Efek getar pada kamera diakibatkan tabrakan
+            // Camera shake effect triggered by collision
             shakeDuration = 0.5f;
 
-            // Cek jika meteor menabrak pemain
+            // Check if meteor hits the player
             if (CheckCollisionCircleRec(meteors[i].center, meteors[i].radius, player.playerCollisionRect))
             {
               player.TriggerDamage(1);
@@ -123,9 +123,7 @@ int main(int argc, char *argv[]) // Entry point
           }
         }
 
-        // Jika meteor menabrak player, kurangi health pemain
-
-        // Efek fade & scale sebelum benar-benar dihancurkan
+        // Fade & scale effect before being fully destroyed
         if (meteors[i].state == MeteorState::DECAYING)
         {
           int fadeSubtraction = 10;
@@ -139,7 +137,8 @@ int main(int argc, char *argv[]) // Entry point
             meteors[i].state = MeteorState::DESTROYING;
           }
         }
-        // Menghancurkan semua meteor jika telah memenuhi persyaratan state
+
+        // Destroy all meteors that meet destruction requirements
         if (meteors[i].y > screenHeight + meteors[i].meteorTexture.height || meteors[i].state == MeteorState::DESTROYING)
         {
           meteors.erase(meteors.begin() + i);
@@ -147,25 +146,25 @@ int main(int argc, char *argv[]) // Entry point
         }
       }
 
-      // Sinkronisasi frameData
+      // Synchronize frameData
       frameData["health"] = player.health;
       frameData["score"] = player.score;
 
-      // Logic camera shake effect
+      // Camera shake effect logic
       if (shakeDuration > 0)
       {
         shakeDuration -= GetFrameTime();
-        // Efek guncang
+        // Applying shake offset
         camera.offset.x = screenCenter.x + GetRandomValue(-shakeIntensity, shakeIntensity);
         camera.offset.y = screenCenter.y + GetRandomValue(-shakeIntensity, shakeIntensity);
       }
       else
       {
-        // Kembali ke tengah dengan halus jika durasi habis
+        // Smoothly return to center when duration ends
         camera.offset.x = Lerp(camera.offset.x, screenCenter.x, 0.1f);
         camera.offset.y = Lerp(camera.offset.y, screenCenter.y, 0.1f);
 
-        // Paksa berhenti jika sudah sangat dekat dengan titik tengah
+        // Snap to center if very close to the target point
         if (CheckCollisionPointCircle(camera.offset, screenCenter, 0.1f))
         {
           camera.offset = screenCenter;
@@ -173,7 +172,7 @@ int main(int argc, char *argv[]) // Entry point
       }
     }
 
-    // Drawing logic
+    // Drawing Logic
     BeginDrawing();
 
     ClearBackground(backgroundColor);
@@ -191,7 +190,7 @@ int main(int argc, char *argv[]) // Entry point
     }
     EndMode2D();
 
-    // Gambar UI di atas kamera
+    // Draw UI on top of the camera space
     gameUI.Draw(gameUI.currState, frameData);
     EndDrawing();
   }
