@@ -10,7 +10,7 @@ include(FetchContent)
 # FORCE Android platform for Raylib before fetching
 if(PLATFORM STREQUAL "Android")
     set(PLATFORM "Android" CACHE STRING "" FORCE)
-    set(GRAPHICS "GRAPHICS_API_OPENGL_ES_20" CACHE STRING "" FORCE)
+    set(GRAPHICS "GRAPHICS_API_OPENGL_ES_33" CACHE STRING "" FORCE)
     set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
     # Disable GLFW so that cmake doesn't search for X11
@@ -43,7 +43,7 @@ if(PLATFORM STREQUAL "Android")
     add_library(${PROJECT_NAME} SHARED ${SOURCES} "${NATIVE_APP_GLUE_DIR}/android_native_app_glue.c")
     add_definitions(-DPLATFORM_ANDROID)
     
-    target_link_libraries(${PROJECT_NAME} raylib android log GLESv2 EGL OpenSLES m atomic c)
+    target_link_libraries(${PROJECT_NAME} raylib android log GLESv3 EGL OpenSLES m atomic c)
 
     # --- Build Tools Path Configuration ---
     set(SDK_PATH "C:/Android") 

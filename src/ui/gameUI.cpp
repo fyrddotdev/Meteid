@@ -26,12 +26,10 @@ void GameUI::ingameUI(int health, int score) const
   CalculatedBarWidth = 12.3 * health;
 
   static std::vector<Texture2D> healthBarTexture = {
-      LoadTexture(ASSETS_PATH "graphics/health_bg.png"),
-      LoadTexture(ASSETS_PATH "graphics/health_fg.png"),
-      LoadTexture(ASSETS_PATH "graphics/health_heart.png")};
+      LoadTexturePixel(ASSETS_PATH "graphics/health_bg.png"),
+      LoadTexturePixel(ASSETS_PATH "graphics/health_fg.png"),
+      LoadTexturePixel(ASSETS_PATH "graphics/health_heart.png")};
 
-  // Honestly, this code is very hard to maintain.
-  // Minor changes can easily break the health bar alignment.
   NPatchInfo NPatchHealthbarFG = {
       {0, 3, 0, 27},
       4,
@@ -40,6 +38,9 @@ void GameUI::ingameUI(int health, int score) const
       0,
       NPATCH_THREE_PATCH_HORIZONTAL};
 
+  // Honestly, this code is very hard to maintain.
+  // Minor changes can easily break the health bar alignment.
+  // Planned to rework this but i need to complete the core of this game :)
   DrawTextureEx(healthBarTexture[0], {16, 16}, 0, 0.5f, WHITE); // Draw healthbar background
   DrawTextureNPatch(healthBarTexture[1], NPatchHealthbarFG, {19, 19, CalculatedBarWidth, 0},
                     {0, 0}, 0, WHITE); // Draw healthbar foreground

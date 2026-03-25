@@ -3,6 +3,7 @@
 #endif
 
 #include <iostream>
+#include <string>
 
 #include <raylib.h>
 #include <raymath.h>
@@ -22,31 +23,67 @@
 float shakeDuration;
 float shakeIntensity = 4.0f;
 
-int main(int argc, char *argv[]) // Entry point
+int main() // Entry point
 {
+  SetConfigFlags(FLAG_WINDOW_HIGHDPI);
 
-  // Initialize GameWindow
-  constexpr int screenWidth = 360;
-  constexpr int screenHeight = 640;
-  Vector2 screenCenter = {screenWidth / 2, screenHeight / 2};
+  RenderTexture2D targetMobile = {0};
+  if (IS_DESKTOP)
+  {
+    // InitWindows first so that OpenGL Context can detect monitor's
+    InitWindow(10, 10, "Loading...");
+
+    int mHeight = GetMonitorHeight(0);
+    int winH = (int)(mHeight * 0.875f);
+    int winW = (int)(winH * (9.0f / 16.0f));
+
+    // Then set the resolution
+    SetWindowSize(winW, winH);
+    SetWindowTitle("METEID! Raylib Edition");
+
+    // set the window to the center of the monitor screen
+    SetWindowPosition((GetMonitorWidth(0) - winW) / 2, (GetMonitorHeight(0) - winH) / 2);
+  }
+  else
+  {
+    // In android, force to init with default base resolution
+    InitWindow(BASE_WIDTH, BASE_HEIGHT, "METEID!");
+    targetMobile = LoadRenderTexture(BASE_WIDTH, BASE_HEIGHT);
+    SetTextureFilter(targetMobile.texture, TEXTURE_FILTER_POINT);
+  }
+
+  // We need to initialize this both variables so that the code can run without any error missing variables
+  int screenWidth = GetScreenWidth();
+  int screenHeight = GetScreenHeight();
+  Vector2 screenCenter = {(float)screenWidth / 2, (float)screenHeight / 2};
+
   const Color backgroundColor = {35, 26, 63, 255};
 
-  SetConfigFlags(FLAG_WINDOW_HIGHDPI);
-  InitWindow(screenWidth, screenHeight, "METEID! Raylib edition");
   SetTextureFilter(GetFontDefault().texture, TEXTURE_FILTER_POINT);
   SetTargetFPS(60);
 
   // Initialize Camera
   Camera2D camera = {0};
-  camera.offset = {screenWidth / 2, screenHeight / 2};
-  camera.target = {screenWidth / 2, screenHeight / 2};
-  camera.rotation = 0.0f;
+
+  camera.offset = {(float)screenWidth / 2, (float)screenHeight / 2};
+  camera.target = {(float)screenWidth / 2, (float)screenHeight / 2};
+
+  // Paksa target dan offset kamera jadi angka bulat
+  camera.target.x = floorf(camera.target.x);
+  camera.target.y = floorf(camera.target.y);
+  camera.offset.x = floorf(camera.offset.x);
+  camera.offset.y = floorf(camera.offset.y);
+
   camera.zoom = 1.0f;
+
+  // Initialize CameraUI
+  Camera2D cameraUI = {0};
+  cameraUI.zoom = 1.0f;
 
   // Initialize GameUI
   GameUI gameUI;
   gameUI.currState = GameUI::gameState::INGAME;
-  GuiLoadStyle(ASSETS_PATH "styles/meteid!.rgs");
+  GuiLoadStyle(ASSETS_PATH "styles/meteid.rgs");
 
   // Initialize Player
   Player player;
@@ -54,7 +91,7 @@ int main(int argc, char *argv[]) // Entry point
   // Initialize Meteor
   std::vector<Meteor> meteors;
 
-  Meteor::meteorTexture = LoadTexture(ASSETS_PATH "graphics/meteorid.png");
+  Meteor::meteorTexture = LoadTexturePixel(ASSETS_PATH "graphics/meteorid.png");
   Meteor meteor;
   float spawnTimer = 0.0f;
   float spawnInterval = GetRandomValue(3, 15) / 10.0f;
@@ -67,12 +104,11 @@ int main(int argc, char *argv[]) // Entry point
   playerExplosion.Init();
 
   // Initialize Game Environment
-  const Rectangle PlayerLine = {-32, player.rect.y - 4, screenWidth + 64, 8};
+  const Rectangle PlayerLine = {-32, player.rect.y - 4, (float)screenWidth + 64, 8};
 
   // Game Loop Logic
   while (!WindowShouldClose())
   {
-
     // Initialize packet for this frame
     GameUI::UIPacket frameData;
 
@@ -173,26 +209,71 @@ int main(int argc, char *argv[]) // Entry point
     }
 
     // Drawing Logic
-    BeginDrawing();
-
-    ClearBackground(backgroundColor);
-
-    BeginMode2D(camera);
-
-    if (gameUI.currState == GameUI::gameState::INGAME || gameUI.currState == GameUI::gameState::GAMEOVER)
+    if (!IS_DESKTOP)
     {
-      DrawRectangleRec(PlayerLine, WHITE);
-      player.Draw();
-      bomber.Draw();
-      playerExplosion.Draw();
-      for (auto &m : meteors)
-        m.Draw();
-    }
-    EndMode2D();
+      BeginTextureMode(targetMobile);
+      ClearBackground(backgroundColor);
 
-    // Draw UI on top of the camera space
-    gameUI.Draw(gameUI.currState, frameData);
-    EndDrawing();
+      DrawText("test", 50, 53, 16, GREEN);
+
+      BeginMode2D(camera);
+      if (gameUI.currState == GameUI::gameState::INGAME || gameUI.currState == GameUI::gameState::GAMEOVER)
+      {
+        DrawRectangleRec(PlayerLine, WHITE);
+        player.Draw();
+        bomber.Draw();
+        playerExplosion.Draw();
+        for (auto &m : meteors)
+          m.Draw();
+      }
+      EndMode2D();
+
+      // UI
+      BeginMode2D(cameraUI);
+
+      // Draw UI on top of the camera space
+      gameUI.Draw(gameUI.currState, frameData);
+
+      EndMode2D();
+      EndTextureMode();
+
+      BeginDrawing();
+      // Source rectangle is the entire virtual screen texture
+      Rectangle sourceRec = {0.0f, 0.0f, (float)targetMobile.texture.width, (float)-targetMobile.texture.height};
+      // Destination rectangle is the entire physical screen
+      Rectangle destRec = {0.0f, 0.0f, (float)screenWidth, (float)screenHeight};
+      // Draw the texture, scaled to fit the screen
+      DrawTexturePro(targetMobile.texture, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
+      EndDrawing();
+    }
+    else
+    {
+      BeginDrawing();
+
+      ClearBackground(backgroundColor);
+
+      BeginMode2D(camera);
+      if (gameUI.currState == GameUI::gameState::INGAME || gameUI.currState == GameUI::gameState::GAMEOVER)
+      {
+        DrawRectangleRec(PlayerLine, WHITE);
+        player.Draw();
+        bomber.Draw();
+        playerExplosion.Draw();
+        for (auto &m : meteors)
+          m.Draw();
+      }
+      EndMode2D();
+
+      // UI
+      BeginMode2D(cameraUI);
+
+      // Draw UI on top of the camera space
+      gameUI.Draw(gameUI.currState, frameData);
+
+      EndMode2D();
+
+      EndDrawing();
+    }
   }
   UnloadTexture(Meteor::meteorTexture);
   CloseWindow();

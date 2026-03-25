@@ -7,18 +7,22 @@
 
 #include "gameUI.h"
 
+// Extern variable from main.cpp, planned to make cameraShake a separated class...
 extern float shakeDuration;
 extern float shakeIntensity;
 
-float decayTimer = 3.0f;
-float rotationSpeed = 0.5f;
+// Initialize variable for dead animation
+static float playerDecayTimer = 3.0f;
+static float playerRotationSpeed = 0.5f;
+static float playerDecayTargetY;
 
 Player::Player()
 {
+  // Player statistic
   speedX = 5;
-  health = 1;
+  health = 10;
   score = 0;
-  rect = {256, 550, 32, 32};
+  rect = {256, (float)GetScreenHeight() - 96, 32, 32};
   origin = {0};
   rotation = 0.0f;
   isDead = false;
@@ -26,6 +30,9 @@ Player::Player()
   damageInterval = 0.4f;
   damageTimer = 0.0f;
   instance = this;
+
+  // Other important variables here
+  playerDecayTargetY = rect.y - 128;
 }
 
 Color playerColor = {0, 194, 200, 255};
@@ -69,18 +76,18 @@ void Player::Update()
   // Death / Decay Animation
   if (isDead && !afterDecay)
   {
-    rect.y = Lerp(rect.y, 450, 0.025f);
-    rotation = Wrap(rotation + rotationSpeed, 0, 360);
-    if (rotationSpeed < 200.0f)
+    rect.y = Lerp(rect.y, playerDecayTargetY, 0.025f);
+    rotation = Wrap(rotation + playerRotationSpeed, 0, 360);
+    if (playerRotationSpeed < 200.0f)
     {
-      rotationSpeed += 0.2f;
+      playerRotationSpeed += 0.2f;
     }
-    if (decayTimer > 0)
+    if (playerDecayTimer > 0)
     {
-      decayTimer -= GetFrameTime();
+      playerDecayTimer -= GetFrameTime();
     }
 
-    if (rect.y < 450 + 1 && decayTimer <= 0)
+    if (rect.y < playerDecayTargetY + 1 && playerDecayTimer <= 0)
     {
       if (!PlayerExplosion::Get()->enabled)
       {

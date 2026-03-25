@@ -26,8 +26,8 @@ PlayerExplosion::PlayerExplosion()
 void PlayerExplosion::Init()
 {
   textures = {
-      LoadTexture(ASSETS_PATH "effects/playerExplodeEffect.png"),
-      LoadTexture(ASSETS_PATH "effects/lightExplodeEffect.png")};
+      LoadTexturePixel(ASSETS_PATH "effects/playerExplodeEffect.png"),
+      LoadTexturePixel(ASSETS_PATH "effects/lightExplodeEffect.png")};
   PeSource = {0,
               0,
               (float)textures[0].width,

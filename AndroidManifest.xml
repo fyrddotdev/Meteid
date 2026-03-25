@@ -3,6 +3,8 @@
           package="com.fyrddev.meteid">
     
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" />
+    
+    <uses-feature android:glEsVersion="0x00030000" android:required="true" />
 
     <application android:label="Meteid" android:hasCode="false">
         <activity android:name="android.app.NativeActivity" 

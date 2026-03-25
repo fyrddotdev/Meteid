@@ -26,10 +26,10 @@ Bomber::Bomber()
 {
   // Memuat semua texture yang dibutuhkan
   bomberTextures = {
-      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_0.png"),
-      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_1.png"),
-      LoadTexture(ASSETS_PATH "graphics/enemies/bomber_2.png")};
-  bomb.texture = LoadTexture(ASSETS_PATH "graphics/enemies/bomb.png");
+      LoadTexturePixel(ASSETS_PATH "graphics/enemies/bomber_0.png"),
+      LoadTexturePixel(ASSETS_PATH "graphics/enemies/bomber_1.png"),
+      LoadTexturePixel(ASSETS_PATH "graphics/enemies/bomber_2.png")};
+  bomb.texture = LoadTexturePixel(ASSETS_PATH "graphics/enemies/bomb.png");
 
   // Initialisasi bomb
   bomb.maxSpeed = 10.0f;
